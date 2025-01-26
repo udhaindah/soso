@@ -1,0 +1,61 @@
+import chalk from "chalk";
+import fs from "fs";
+import { getRandomProxy, loadProxies } from "./classes/proxy";
+import { sosoValuRefferal } from "./classes/sosoValue";
+import { logMessage, prompt, rl } from "./utils/logger";
+
+async function main(): Promise<void> {
+  console.log(
+    chalk.cyan(`
+░█▀▀░█▀█░█▀▀░█▀█░░░█░█░█▀█░█░░░█░█░█▀▀
+░▀▀█░█░█░▀▀█░█░█░░░▀▄▀░█▀█░█░░░█░█░█▀▀
+░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░░░▀░░▀░▀░▀▀▀░▀▀▀░▀▀▀
+        By : El Puqus Airdrop
+        github.com/ahlulmukh
+      Use it at your own risk
+  `)
+  );
+
+  const refCode = await prompt(chalk.yellow("Enter Referral Code: "));
+  const count = parseInt(await prompt(chalk.yellow("How many do you want? ")));
+  const password = "TXVraDIwMDE=";
+  const proxiesLoaded = loadProxies();
+  if (!proxiesLoaded) {
+    console.log(chalk.yellow("No proxy available. Using default IP."));
+  }
+  let successful = 0;
+
+  const sosoValueaccount = fs.createWriteStream("accounts.txt", { flags: "a" });
+
+  for (let i = 0; i < count; i++) {
+    console.log(chalk.white("-".repeat(85)));
+    logMessage(i + 1, count, "Process", "debug");
+    const currentProxy = await getRandomProxy();
+    const sosoValue = new sosoValuRefferal(refCode, currentProxy);
+
+
+    try{
+      const email = sosoValue.generateTempEmail();
+      const registered = await sosoValue.registerAccount(email, password);
+      if(registered){
+        successful++;
+        sosoValueaccount.write(`Email Address : ${email}\nPassword : ${password}\n`);
+        sosoValueaccount.write(`===================================================================\n`);
+      }
+    } catch(err){
+      logMessage(i + 1, count, `Error: `, "error");
+    }
+  }
+
+  sosoValueaccount.end();
+
+  console.log(chalk.magenta("\n[*] Dono bang!"));
+  console.log(chalk.green(`[*] Account dono ${successful} dari ${count} akun`));
+  console.log(chalk.magenta("[*] Result in accounts.txt"));
+  rl.close(); 
+}
+
+main().catch((err) => {
+  console.error(chalk.red("Error occurred:"), err);
+  process.exit(1);
+});
