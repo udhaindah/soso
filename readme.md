@@ -4,7 +4,6 @@ This bot automates the process of creating accounts and using referral codes for
 
 ## Features
 
-- Automatically generates wallet.
 - Using IMAP Gmail
 - Uses proxies to avoid IP bans.
 - Logs the created accounts.
