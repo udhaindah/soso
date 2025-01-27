@@ -7,6 +7,7 @@ This bot automates the process of creating accounts and using referral codes for
 - Using IMAP Gmail
 - Uses proxies to avoid IP bans.
 - Logs the created accounts.
+- Free bypass captcha using puppeter tested on windows.
 
 ## Requirements
 
