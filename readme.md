@@ -7,7 +7,7 @@ This bot automates the process of creating accounts and using referral codes for
 - Using IMAP Gmail
 - Uses proxies to avoid IP bans.
 - Logs the created accounts.
-- Free bypass captcha using puppeter tested on windows.
+- Free bypass captcha using puppeter tested on windows, linux.
 
 ## Requirements
 
@@ -16,6 +16,18 @@ This bot automates the process of creating accounts and using referral codes for
 - 2Captcha Apikey [2Captcha](https://2captcha.com/).
 - Gmail Account.
 - How to get Password Email [Here](https://www.youtube.com/watch?v=_rAoQeKpEtM)
+
+## Notes on linux
+
+if you want using puppeter on linux you must install
+
+```bash
+sudo apt-get install xvfb
+npm i xvfb
+```
+
+If you get error `ChromePathNotSetError The CHROME_PATH environment variable must be set to a Chrome/Chromium executable no older than Chrome stable`.
+read [here](https://github.com/ZFC-Digital/puppeteer-real-browser/issues/81#issuecomment-2206034655) for fix that issue.
 
 ## Installation
 
