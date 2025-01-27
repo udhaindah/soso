@@ -22,12 +22,9 @@ This bot automates the process of creating accounts and using referral codes for
 if you want using puppeter on linux you must install
 
 ```bash
-sudo apt-get install xvfb
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo apt --fix-broken install -y && sudo apt install -f ./google-chrome-stable_current_amd64.deb -y && sudo apt install xvfb -y
 npm i xvfb
 ```
-
-If you get error `ChromePathNotSetError The CHROME_PATH environment variable must be set to a Chrome/Chromium executable no older than Chrome stable`.
-read [here](https://github.com/ZFC-Digital/puppeteer-real-browser/issues/81#issuecomment-2206034655) for fix that issue.
 
 ## Installation
 
