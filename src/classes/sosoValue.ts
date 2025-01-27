@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import fs from "fs";
 import { simpleParser } from "mailparser";
 import path from "path";
-import { solveTurnstileCaptcha } from "../utils/captchaServices";
+import { solveTurnstileCaptcha, solveTurnstileCaptchaPuppeter } from "../utils/captchaServices";
 import { EmailGenerator } from "../utils/generate";
 import { logMessage } from "../utils/logger";
 import { authorize } from "./authGmail";
@@ -19,16 +19,18 @@ export class sosoValuRefferal {
   private axiosConfig: any;
   private baseEmail: string;
   private siteKey: string;
+  private captchaMethod: string;
 
-  constructor(refCode: string, proxy: string | null = null) {
+  constructor(refCode: string, proxy: string | null = null,  captchaMethod: string = "1") {
     this.refCode = refCode;
     this.proxy = proxy;
+    this.captchaMethod = captchaMethod;
     this.axiosConfig = {
       ...(this.proxy && { httpsAgent: getProxyAgent(this.proxy) }),
       timeout: 60000,
     };
     this.baseEmail = confEmail;
-    this.siteKey = "0x4AAAAAAA4PZrjDa5PcluqN"
+    this.siteKey = "0x4AAAAAAA4PZrjDa5PcluqN";
 
   }
 
@@ -103,7 +105,16 @@ export class sosoValuRefferal {
       "process"
     );
 
-    const captchaResponse = await solveTurnstileCaptcha(this.siteKey, "https://sosovalue.com/");
+    let captchaResponse: string | null = null;
+    if (this.captchaMethod === "1") {
+      captchaResponse = await solveTurnstileCaptcha(this.siteKey, "https://sosovalue.com/");
+    } else if (this.captchaMethod === "2") {
+      captchaResponse = await solveTurnstileCaptchaPuppeter();
+    } else {
+      logMessage(null, null, "Invalid CAPTCHA method selected.", "error");
+      return false;
+    }
+
     if (!captchaResponse) {
       logMessage(null, null, "Failed to solve captcha", "error");
       return false;
@@ -235,10 +246,12 @@ export class sosoValuRefferal {
     const cekEmail =  await this.cekEmailValidation(email)
     if (!cekEmail){
       logMessage(null, null, "Email already registered", "error");
+      return null;
     }
     const sendEmailCode = await this.sendEmailCode(email, password);
     if (!sendEmailCode) {
       logMessage(null, null, "Failed send email", "error");
+      return null;
     }
     const verifyCode = await this.getCodeVerification(email);
     if (!verifyCode) {

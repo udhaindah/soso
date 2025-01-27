@@ -18,6 +18,11 @@ async function main(): Promise<void> {
 
   const refCode = await prompt(chalk.yellow("Enter Referral Code: "));
   const count = parseInt(await prompt(chalk.yellow("How many do you want? ")));
+
+  const captchaMethod = await prompt(
+    chalk.yellow(`Choose Captcha Metode \n1.2Captcha\n2.Puppeteer (Free) :`)
+  );
+
   const password = "TXVraDIwMDE=";
   const proxiesLoaded = loadProxies();
   if (!proxiesLoaded) {
@@ -31,7 +36,7 @@ async function main(): Promise<void> {
     console.log(chalk.white("-".repeat(85)));
     logMessage(i + 1, count, "Process", "debug");
     const currentProxy = await getRandomProxy();
-    const sosoValue = new sosoValuRefferal(refCode, currentProxy);
+    const sosoValue = new sosoValuRefferal(refCode, currentProxy, captchaMethod);
 
 
     try{
