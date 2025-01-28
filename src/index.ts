@@ -44,7 +44,9 @@ async function main(): Promise<void> {
       const registered = await sosoValue.registerAccount(email, password);
       if(registered){
         successful++;
-        sosoValueaccount.write(`Email Address : ${email}\nPassword : ${password}\n`);
+        sosoValueaccount.write(`Email Address : ${email}\n`);
+        sosoValueaccount.write(`Password : ${password}\n`);
+        sosoValueaccount.write(`Invitation Code : ${registered.invitationCode}\n`);
         sosoValueaccount.write(`===================================================================\n`);
       }
     } catch(err){

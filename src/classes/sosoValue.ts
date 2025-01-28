@@ -241,6 +241,28 @@ export class sosoValuRefferal {
   }
   
 
+  async getReferralCode(token: string) {
+    const headers = {
+      Authorization: `Bearer ${token}`
+    }
+
+    const response = await this.makeRequest(
+      "GET",
+      "https://gw.sosovalue.com/authentication/user/getUserInfo",
+      {
+        headers: headers,
+      }
+    );
+
+    if (response && response.data.code == 0) {
+      return response.data.data.invitationCode;
+    } else {
+      logMessage(null,null, "Failed Get User Info", "error");
+      return null;
+    }
+
+  }
+
   async registerAccount(email: string, password: string) {
     logMessage(null,null, "Register account...", "process");
     const cekEmail =  await this.cekEmailValidation(email)
@@ -282,9 +304,11 @@ export class sosoValuRefferal {
       }
     );
 
+
     if (response && response.data.code == 0) {
       logMessage(null,null, "Register Succesfully", "success");
-      return response.data;
+      const invitationCode =  await this.getReferralCode(response.data.data.token);
+      return { ...response.data, invitationCode };
     } else {
       logMessage(null,null, "Failed Register", "error");
       return null;
