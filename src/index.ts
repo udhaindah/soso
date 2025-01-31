@@ -2,6 +2,7 @@ import chalk from "chalk";
 import fs from "fs";
 import { getRandomProxy, loadProxies } from "./classes/proxy";
 import { sosoValuRefferal } from "./classes/sosoValue";
+import { generatePassword } from "./utils/generate";
 import { logMessage, prompt, rl } from "./utils/logger";
 
 async function main(): Promise<void> {
@@ -41,6 +42,7 @@ async function main(): Promise<void> {
 
     try{
       const email = sosoValue.generateTempEmail();
+      const password = generatePassword() 
       const registered = await sosoValue.registerAccount(email, password);
       if(registered){
         successful++;
