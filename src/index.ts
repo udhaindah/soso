@@ -2,6 +2,7 @@ import chalk from "chalk";
 import fs from "fs";
 import { getRandomProxy, loadProxies } from "./classes/proxy";
 import { sosoValuRefferal } from "./classes/sosoValue";
+import { generatePassword } from "./utils/generate";
 import { logMessage, prompt, rl } from "./utils/logger";
 
 async function main(): Promise<void> {
@@ -18,12 +19,9 @@ async function main(): Promise<void> {
 
   const refCode = await prompt(chalk.yellow("Enter Referral Code: "));
   const count = parseInt(await prompt(chalk.yellow("How many do you want? ")));
-
   const captchaMethod = await prompt(
     chalk.yellow(`Choose Captcha Metode \n1.2Captcha\n2.Puppeteer (Free) :`)
   );
-
-  const password = "TXVraDIwMDE=";
   const proxiesLoaded = loadProxies();
   if (!proxiesLoaded) {
     console.log(chalk.yellow("No proxy available. Using default IP."));
@@ -41,11 +39,12 @@ async function main(): Promise<void> {
 
     try{
       const email = sosoValue.generateTempEmail();
-      const registered = await sosoValue.registerAccount(email, password);
+      const password = generatePassword() 
+      const registered = await sosoValue.registerAccount(email, password.encodedPassword);
       if(registered){
         successful++;
         sosoValueaccount.write(`Email Address : ${email}\n`);
-        sosoValueaccount.write(`Password : ${password}\n`);
+        sosoValueaccount.write(`Password : ${password.password}\n`);
         sosoValueaccount.write(`Invitation Code : ${registered.invitationCode}\n`);
         sosoValueaccount.write(`===================================================================\n`);
       }
